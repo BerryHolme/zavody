@@ -8,7 +8,5 @@ class install
     {
         \models\User::setdown();
         \models\User::setup();
-        \models\zpravy::setdown();
-        \models\zpravy::setup();
     }
 }

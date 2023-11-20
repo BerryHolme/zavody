@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrace</title>
+</head>
+<body>
+<div class="container">
+    <h1>Registrace</h1>
+    <form method="POST">
+        <div id="registration_error" class="registration_error">{{@error_msg}}</div>
+        <label for="jmeno">Jméno: </label>
+        <input type="text" id="jmeno" name="jmeno" required placeholder="Jméno" >
+
+        <label for="prijmeni">Příjmení: </label>
+        <input type="text" id="prijmeni" name="prijmeni" required placeholder="Příjmení" >
+
+        <br>
+
+        <label for="email">Email: </label>
+        <input type="email" id="email" name="email" required placeholder="Email" >
+
+        <br>
+
+        <label for="heslo">Heslo: </label>
+        <input type="password" id="heslo" name="heslo" required placeholder="Heslo" >
+
+        <br>
+
+        <label for="souhlas">Souhlasím s <a href="podminky/">podmínkami</a> použití: </label>
+        <input type="checkbox" id="souhlas" name="souhlas" required>
+
+        <br>
+
+        <input type=submit value="Registrovat">
+    </form>
+</div>
+
+Pokud už máte účet můžete se <a href="prihlaseni/">přihlásit</a>
+
+
+</body>
+</html>
