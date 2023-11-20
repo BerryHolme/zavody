@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nový závod</title>
+</head>
+<body>
+<h1>Vytvořte nový závod</h1>
+
+<form method="POST" enctype="multipart/form-data">
+    <div id="novyzavod_error" class="novyzavod_error">{{@error_zavod}}</div>
+
+    <label for="jmeno">Jméno závodu: </label>
+    <input type="text" id="jmeno" name="jmeno" required placeholder="Velká běhaná" >
+
+    <br>
+
+    <label for="datum">Datum závodu: </label>
+    <input type="DATE" id="datum" name="datum" required>
+
+    <br>
+
+    <label for="cas">Čas závodu: </label>
+    <input type="TIME" id="cas" name="cas" required>
+
+    <br>
+
+    <label for="Start">Místo startu: </label>
+    <input type="text" id="start" name="start" required placeholder="Mariánský příkop">
+
+    <br>
+
+    <label for="Cil">Cíl závodu: </label>
+    <input type="text" id="cil" name="cil" required placeholder="Jupiter">
+
+    <br>
+
+    <label for="delka">Delka závodu: </label>
+    <input type="number" id="delka" name="delka" placeholder="123">
+
+    <br>
+
+    <label for="otevreno">Otevřeno: </label>
+    <input type="checkbox" id="otevreno" name="otevreno">
+
+
+    <br>
+
+
+
+    <input type=submit value="Vytvořit">
+</form>
+</body>
+</html>

@@ -3,7 +3,7 @@
         'name' => 'little/chat',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'ff21faac36dc30c00e2ca8c3566b3626960da166',
+        'reference' => '9222eda165aa62677bebc03746796ba3c08c88b9',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -49,7 +49,7 @@
         'little/chat' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'ff21faac36dc30c00e2ca8c3566b3626960da166',
+            'reference' => '9222eda165aa62677bebc03746796ba3c08c88b9',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

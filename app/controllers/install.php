@@ -8,5 +8,8 @@ class install
     {
         \models\User::setdown();
         \models\User::setup();
+
+        \models\zavody::setdown();
+        \models\zavody::setup();
     }
 }

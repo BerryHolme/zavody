@@ -7,7 +7,7 @@
 <body>
 <div class="container">
     <h1>Registrace</h1>
-    <form method="POST">
+    <form method="POST"enctype="multipart/form-data">
         <div id="registration_error" class="registration_error">{{@error_msg}}</div>
         <label for="jmeno">Jméno: </label>
         <input type="text" id="jmeno" name="jmeno" required placeholder="Jméno" >
@@ -24,6 +24,11 @@
 
         <label for="heslo">Heslo: </label>
         <input type="password" id="heslo" name="heslo" required placeholder="Heslo" >
+
+        <br>
+
+        <label for="image">Profilový obrázek</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
 
         <br>
 

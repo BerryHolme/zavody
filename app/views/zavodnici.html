@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zavodnici</title>
+</head>
+<body>
+<!-- Předpokládejme, že máte výsledky z databáze v proměnné $zavodniciVeZavode -->
+<table>
+    <thead>
+    <tr>
+        <th>ID závodníka</th>
+        <th>ID závodu</th>
+        <th>Schváleno</th>
+        <th>Datum přihlášení</th>
+        <th>Délka závodu</th>
+        <th>Pořadí</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($zavod as $zavodnik): ?>
+    <tr>
+        <td><?= $zavodnik['id-zavodnika'] ?></td>
+        <td><?= $zavodnik['id-zavodu'] ?></td>
+        <td><?= $zavodnik['schvaleno'] ? 'Ano' : 'Ne' ?></td>
+        <td><?= $zavodnik['datum-prihlaseni'] ?></td>
+        <td><?= $zavodnik['delka-zavodu'] ?></td>
+        <td><?= $zavodnik['poradi'] ?></td>
+    </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+
+</body>
+</html>

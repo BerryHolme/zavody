@@ -6,14 +6,16 @@
 </head>
 <body>
 <div class="container">
+
+    <div id="registration_error" class="registration_error">{{@error_msg_prihlaseni}}</div>
     <form method="POST">
         <label for="email">Email: </label>
-        <input type="text" id="email" name="email" reguiered placeholder="Email" >
+        <input type="text" id="email" name="email" required placeholder="Email" >
 
         <br>
 
         <label for="heslo">Heslo: </label>
-        <input type="password" id="heslo" name="heslo" reguiered placeholder="Heslo" >
+        <input type="password" id="heslo" name="heslo" required placeholder="Heslo" >
 
         <br>
 
