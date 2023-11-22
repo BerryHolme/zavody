@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Moje zavody</title>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th>ID závodníka</th>
+        <th>ID závodu</th>
+        <th>Datum přihlášení</th>
+        <th>Délka závodu</th>
+        <th>Pořadí</th>
+        <th>Schválení</th>
+        <th>Zamítnutí</th>
+    </tr>
+    </thead>
+    <tbody>
+    <repeat group="{{@zavodnici}}" value="{{@zavodnik}}">
+        <check if="{{@zavodnik.id_zavodnika == @SESSION.user.id}}">
+            <tr>
+                <td>{{@zavodnik.id_zavodnika}}</td>
+                <td>{{@zavodnik.id_zavodu}}</td>
+                <td>{{@zavodnik.datum_prihlaseni}}</td>
+                <td>{{@zavodnik.delka_zavodu}}</td>
+                <td>{{@zavodnik.poradi}}</td>
+                <td>{{@zavodnik.schvaleno == 1 ? 'Schváleno' : (@zavodnik.schvaleno == 0 ? 'Neschváleno' : (@zavodnik.schvaleno == 2 ? 'Zamítnuto' : 'Neznámá hodnota'))}}</td>
+                <td>{{@zavodnik.zamitnuti}}</td>
+            </tr>
+        </check>
+    </repeat>
+    </tbody>
+</table>
+
+
+</body>
+</html>

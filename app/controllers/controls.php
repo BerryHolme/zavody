@@ -8,17 +8,42 @@ class controls
 {
     public function getNastenka(\Base $base)
     {
-        if($base->get("SESSION.user")){
+        if ($base->get("SESSION.user")) {
             $user = new \models\User();
             $base->set('user', $user->find());
-            //$base64ImageData = base64_encode($_SESSION['user']['image']);
 
-            $zavod = (new \models\zavody)->find([]);
-            $base->set('zavody', $zavod);
+            $zavodnikId = $base->get("SESSION.user.id");
+            $zavodnik = (new \models\zavodnik)->find(['id_zavodnika' == $zavodnikId]);
+            $zavod = (new \models\zavody)->find();
+
+            $ignore = array();
+
+            foreach ($zavodnik as $zavodnika) {
+                if (($zavodnika->id_zavodnika) == ($base->get("SESSION.user.id"))) {
+                    $ignore[] = $zavodnika->id_zavodu;
+                }
+            }
+            $zavodArray = iterator_to_array($zavod);
+
+// Filter the $zavodArray array based on values in $ignore
+            $filteredZavod = array_filter($zavodArray, function ($zavodItem) use ($ignore) {
+                return !in_array($zavodItem->id, $ignore);
+            });
+
+            $base->set('zavody', $filteredZavod);
+
+            $ignoreString = implode(',', $ignore);
+            $base->set('nastenkaError', $ignoreString);
 
             echo \Template::instance()->render("nastenka.html");
-        }else $base->reroute("/prihlaseni");
+        } else {
+            $base->reroute("/prihlaseni");
+        }
     }
+
+
+
+
 
     public function getOdhlasit(\Base $base)
     {

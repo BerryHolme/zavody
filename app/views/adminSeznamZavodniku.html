@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zavodnici</title>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th>ID závodníka</th>
+        <th>ID závodu</th>
+        <th>Datum přihlášení</th>
+        <th>Délka závodu</th>
+        <th>Pořadí</th>
+        <th>Schváleno</th>
+        <th>Schválit</th>
+    </tr>
+    </thead>
+    <tbody>
+    <repeat group="{{@zavodnici}}" value="{{@zavodnik}}">
+        <tr>
+            <td>{{@zavodnik.id_zavodnika}}</td>
+            <td>{{@zavodnik.id_zavodu}}</td>
+            <td>{{@zavodnik.datum_prihlaseni}}</td>
+            <td>{{@zavodnik.delka_zavodu}}</td>
+            <td>{{@zavodnik.poradi}}</td>
+            <td>{{@zavodnik.schvaleno == 1 ? 'Schváleno' : (@zavodnik.schvaleno == 0 ? 'Neschváleno' : (@zavodnik.schvaleno == 2 ? 'Zamítnuto' : 'Neznámá hodnota'))}}</td>
+            <td>
+                <form method="POST" action="/zavody/schvalit/">
+                    <input type="hidden" name="zavodnik" value="{{@zavodnik.id_zavodnika}}">
+                    <input type="hidden" name="zavod" value="{{@zavodnik.id_zavodu}}">
+                    <input type="submit" value="Schválit">
+                </form>
+                <form method="POST" action="zavody/zamitnout/">
+                    <input type="hidden" name="zamitnout" value="{{@zavodnik.id_zavodnika}}">
+                    <input type="submit" value="Zamítnout">
+                </form>
+            </td>
+        </tr>
+    </repeat>
+    </tbody>
+</table>
+
+
+</body>
+</html>

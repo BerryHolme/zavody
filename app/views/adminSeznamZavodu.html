@@ -74,13 +74,12 @@
     <div class="dropdown-content">
         <a href="nastenka/">Domů</a>
         <a href="ucet/">Nastavení účtu</a>
-        <a href="mojeZavody/">Přihlášené závody</a>
+        <a href="#">Přihlášené závody</a>
         {{@SESSION.user.role == 1 ? '<a href="admin/">Pořadatel</a>' : (@SESSION.user.role == 0 ? '' : '')}}
         <a href="odhlasit/">Odhlásit se</a>
     </div>
 </div>
 
-{{@nastenkaError}}
 
 <table>
     <thead>
@@ -91,26 +90,27 @@
     <th>Start</th>
     <th>Cíl</th>
     <th>Délka</th>
-    <th>Přihlási se</th>
+    <th>Zavodnici v zavode</th>
     </thead>
     <tbody>
     <repeat group="{{@zavody}}" value="{{@zavod}}">
-            <tr>
-                <td>{{@zavod.id}}</td>
-                <td>{{@zavod.jmeno}}</td>
-                <td>{{@zavod.datum}}</td>
-                <td>{{@zavod.cas}}</td>
-                <td>{{@zavod.start}}</td>
-                <td>{{@zavod.cil}}</td>
-                <td>{{@zavod.delka}}</td>
-                <td>
-                    <form method="POST" action="registrovat-do-zavodu/">
-                        <input type="hidden" name="id_zavodnika" value="{{@SESSION.user.id}}">
-                        <input type="hidden" name="id_zavodu" value="{{@zavod.id}}">
-                        <input type="submit" value="Přihlásit">
-                    </form>
-                </td>
-            </tr>
+        <tr>
+            <td>{{@zavod.id}}</td>
+            <td>{{@zavod.jmeno}}</td>
+            <td>{{@zavod.datum}}</td>
+            <td>{{@zavod.cas}}</td>
+            <td>{{@zavod.start}}</td>
+            <td>{{@zavod.cil}}</td>
+            <td>{{@zavod.delka}}</td>
+
+            <td>
+                <form method="POST" action="adminSeznamZavodniku/">
+                    <input type="hidden" name="id_zavodu" value="{{@zavod.id}}">
+                    <input type="submit" value="Zobrazit zavodniky">
+                </form>
+
+            </td>
+        </tr>
     </repeat>
     </tbody>
 </table>
