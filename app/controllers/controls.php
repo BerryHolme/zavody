@@ -13,7 +13,19 @@ class controls
             $base->set('user', $user->find());
 
             $zavodnikId = $base->get("SESSION.user.id");
-            $zavodnik = (new \models\zavodnik)->find(['id_zavodnika' == $zavodnikId]);
+
+            // Check if there is any data in the zavodnik table for the current user
+            $zavodnik = (new \models\zavodnik)->find(['id_zavodnika' => $zavodnikId]);
+
+            if (!$zavodnik) {
+                // If no zavodnik records found, display all zavody without filtering
+                $zavod = (new \models\zavody)->find();
+                $base->set('zavody', $zavod);
+                $base->set('nastenkaError', 'No records found for the current user in the zavodnik table.');
+                echo \Template::instance()->render("nastenka.html");
+                return;
+            }
+
             $zavod = (new \models\zavody)->find();
 
             $ignore = array();
@@ -23,9 +35,10 @@ class controls
                     $ignore[] = $zavodnika->id_zavodu;
                 }
             }
+
             $zavodArray = iterator_to_array($zavod);
 
-// Filter the $zavodArray array based on values in $ignore
+            // Filter the $zavodArray array based on values in $ignore
             $filteredZavod = array_filter($zavodArray, function ($zavodItem) use ($ignore) {
                 return !in_array($zavodItem->id, $ignore);
             });
@@ -33,13 +46,16 @@ class controls
             $base->set('zavody', $filteredZavod);
 
             $ignoreString = implode(',', $ignore);
-            $base->set('nastenkaError', $ignoreString);
+            $base->set('nastenkaError', '');
 
             echo \Template::instance()->render("nastenka.html");
         } else {
             $base->reroute("/prihlaseni");
         }
     }
+
+
+
 
 
 

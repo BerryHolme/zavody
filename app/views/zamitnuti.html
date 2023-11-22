@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zamítnutí</title>
+</head>
+<body>
+<h1>Zamítnutí žádosti uživatele {{@jmeno}} {{@prijmeni}} v závodě {{@jmenoZavodu}}  </h1>
+
+<form method="post" action="/zavody/zrusitZamitnuti/">
+    <input type="hidden" id="id_zavodu" name="id_zavodu" value="{{@id_zavodu}}" >
+
+    <input type=submit value="Zrušit">
+</form>
+
+<form method="post" action="/zavody/odeslat/">
+    <label for="zamitnuti">Dúvod zamítnutí: </label>
+    <input type="text" id="zamitnuti" name="zamitnuti" required placeholder="Moc velký nos" >
+
+    <br>
+
+    <input type="hidden" id="id" name="id" value="{{@id}}">
+    <input type="hidden" id="zavod" name="zavod" value="{{@id_zavodu}}">
+
+    <input type=submit value="Odeslat" >
+</form>
+
+</body>
+</html>

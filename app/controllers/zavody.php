@@ -97,7 +97,7 @@ class zavody
 
     public function getAdminSeznamZavodniku(\Base $base)
     {
-
+        echo \Template::instance()->render("adminSeznamZavodniku.html");
     }
 
     public function postAdminSeznamZavodniku(\Base $base)
@@ -113,21 +113,74 @@ class zavody
     {
         $idZavodnika = $_POST['zavodnik'];
         $idZavodu = $_POST['zavod'];
+
         $zavodnici = (new \models\zavodnik)->find(['id_zavodnika', $idZavodnika]);
+
         foreach ($zavodnici as $zavodnik){
-            if($zavodnik->id_zavodu==$idZavodu) {
+            if ($zavodnik->id_zavodu == $idZavodu && $zavodnik->id_zavodnika == $idZavodnika) {
                 $zavodnik->schvaleno = 1;
                 $zavodnik->save();
             }
         }
-        $base->reroute('/nastenka');
 
+        $zavodnici = (new \models\zavodnik)->find(['id_zavodu=?', $idZavodu], ['order' => 'schvaleno ASC']);
+        $base->set('zavodnici', $zavodnici);
+        echo \Template::instance()->render("adminSeznamZavodniku.html");
+    }
 
-     }
 
     public function postZamitnout(\Base $base)
     {
+        $id =$_POST['id'];
+        $zavodnik = (new \models\zavodnik)->findone("id_zavodnika"== $id);
+        $uzivatel = (new \models\User)->findone('id'== $zavodnik->id_zavodnika);
+        $jmeno = $uzivatel->jmeno;
+        $prijmeni = $uzivatel->prijmeni;
+        $zavod = (new \models\zavody)->findone('id'== $zavodnik->id_zavodu);
+        $jmenoZavodu = $zavod->jmeno;
+        $id_zavodu = $zavod->id;
 
+        $base->set('id', $id);
+        $base->set('jmeno', $jmeno);
+        $base->set('prijmeni', $prijmeni);
+        $base->set('jmenoZavodu', $jmenoZavodu);
+        $base->set('id_zavodu', $id_zavodu);
+
+        echo \Template::instance()->render("zamitnuti.html");
+
+    }
+
+    public function postZrusitZamitnuti(\Base $base)
+    {
+        $idZavodu = $_POST["id_zavodu"];
+
+        $zavodnici = (new \models\zavodnik)->find(['id_zavodu=?', $idZavodu], ['order' => 'schvaleno ASC']);
+        $base->set('zavodnici', $zavodnici);
+        echo \Template::instance()->render("adminSeznamZavodniku.html");
+    }
+
+    public function postOdeslat(\Base $base)
+    {
+        $id = $_POST['id'];
+        $zavod = $_POST['zavod'];
+        $zamitnuti = $_POST['zamitnuti'];
+        $zavodnik = (new \models\zavodnik)->findone("id_zavodnika"== $id);
+
+        $zavodnik->schvaleno = 2;
+        $zavodnik->zamitnuti = $zamitnuti;
+        $zavodnik->save();
+
+        $base->set('zavod', $zavod);
+        echo \Template::instance()->render("uspesneOdeslano.html");
+    }
+
+    public function postPokracovat(\Base $base)
+    {
+        $idZavodu = $_POST["zavod"];
+
+        $zavodnici = (new \models\zavodnik)->find(['id_zavodu=?', $idZavodu], ['order' => 'schvaleno ASC']);
+        $base->set('zavodnici', $zavodnici);
+        echo \Template::instance()->render("adminSeznamZavodniku.html");
     }
 
     public function getMojeZavody(\Base $base)
@@ -138,6 +191,15 @@ class zavody
             $base->set('zavodnici', $zavodnici);
             echo \Template::instance()->render("mojeZavody.html");
         }else $base->reroute("/prihlaseni");
+    }
+
+    public function postSmazatSe(\Base $base)
+    {
+        $id = $_POST['id'];
+        $zavidnik = new \models\zavodnik();
+        $zavodnik = $zavidnik->findone(["id=?",$id]);
+        $zavodnik ->erase();
+        $base ->reroute("nastenka/");;
     }
 
 }

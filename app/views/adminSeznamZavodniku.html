@@ -5,6 +5,7 @@
     <title>Zavodnici</title>
 </head>
 <body>
+<h1>Seznam Závodníků</h1>
 <table>
     <thead>
     <tr>
@@ -15,6 +16,8 @@
         <th>Pořadí</th>
         <th>Schváleno</th>
         <th>Schválit</th>
+        <th>Zamítnutí</th>
+        <th>Duvod</th>
     </tr>
     </thead>
     <tbody>
@@ -32,11 +35,13 @@
                     <input type="hidden" name="zavod" value="{{@zavodnik.id_zavodu}}">
                     <input type="submit" value="Schválit">
                 </form>
-                <form method="POST" action="zavody/zamitnout/">
-                    <input type="hidden" name="zamitnout" value="{{@zavodnik.id_zavodnika}}">
+                <form method="POST" action="/zavody/zamitnout/">
+                    <input type="hidden" name="id" value="{{@zavodnik.id_zavodnika}}">
+                    <input type="hidden" name="zavod" value="{{@zavodnik.id_zavodu}}">
                     <input type="submit" value="Zamítnout">
                 </form>
             </td>
+            <td>{{@zavodnik.zamitnuti}}</td>
         </tr>
     </repeat>
     </tbody>

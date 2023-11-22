@@ -5,6 +5,8 @@
     <title>Moje zavody</title>
 </head>
 <body>
+
+<h1>Moje závody</h1>
 <table>
     <thead>
     <tr>
@@ -15,6 +17,7 @@
         <th>Pořadí</th>
         <th>Schválení</th>
         <th>Zamítnutí</th>
+        <th>Odhlásit se ze závodu</th>
     </tr>
     </thead>
     <tbody>
@@ -28,6 +31,12 @@
                 <td>{{@zavodnik.poradi}}</td>
                 <td>{{@zavodnik.schvaleno == 1 ? 'Schváleno' : (@zavodnik.schvaleno == 0 ? 'Neschváleno' : (@zavodnik.schvaleno == 2 ? 'Zamítnuto' : 'Neznámá hodnota'))}}</td>
                 <td>{{@zavodnik.zamitnuti}}</td>
+                <td>
+                    <form method="POST" action="smazatSe/">
+                    <input type="hidden" name="id" value="{{@zavodnik.id}}">
+                    <input type="submit" value="Odhlásit se ze závodu">
+                </form>
+                </td>
             </tr>
         </check>
     </repeat>
