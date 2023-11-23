@@ -9,8 +9,7 @@
 
 <h1>Moje závody</h1>
 
-
-Závody které eště nezačali
+Závody čeká na schválení
 <table>
     <thead>
     <tr>
@@ -24,14 +23,50 @@ Závody které eště nezačali
     </thead>
     <tbody>
     <repeat group="{{@zavodnici}}" value="{{@zavodnik}}">
-        <check if="{{@zavodnik.id_zavodnika == @SESSION.user.id}}">
+        <check if="{{@zavodnik.id_zavodnika == @SESSION.user.id and @zavodnik.schvaleno==0}}">
+            <check if="{{@zavodnik.stav!=3}}">
+                <tr>
+                    <td>{{@zavodnik.id_zavodnika}}</td>
+                    <td>{{@zavodnik.id_zavodu}}</td>
+                    <td>{{@zavodnik.datum_prihlaseni}}</td>
+                    <td>{{@zavodnik.schvaleno == 1 ? 'Schváleno' : (@zavodnik.schvaleno == 0 ? 'Neschváleno' : (@zavodnik.schvaleno == 2 ? 'Zamítnuto' : 'Neznámá hodnota'))}}</td>
+                    <td>{{@zavodnik.zamitnuti}}</td>
+                    <td>
+                        <form method="POST" action="smazatSe/">
+                            <input type="hidden" name="id" value="{{@zavodnik.id}}">
+                            <input type="submit" value="Odhlásit se ze závodu">
+                        </form>
+
+                    </td>
+                </tr>
+
+        </check>
+        </check>
+    </repeat>
+    </tbody>
+</table>
+
+<br>
+
+
+Závody které eště nezačali
+<table>
+    <thead>
+    <tr>
+        <th>ID závodníka</th>
+        <th>ID závodu</th>
+        <th>Datum přihlášení</th>
+        <th>Odhlásit se ze závodu</th>
+    </tr>
+    </thead>
+    <tbody>
+    <repeat group="{{@zavodnici}}" value="{{@zavodnik}}">
+        <check if="{{@zavodnik.id_zavodnika == @SESSION.user.id and @zavodnik.schvaleno!=0}}">
             <check if="{{@zavodnik.stav==0}}">
             <tr>
                 <td>{{@zavodnik.id_zavodnika}}</td>
                 <td>{{@zavodnik.id_zavodu}}</td>
                 <td>{{@zavodnik.datum_prihlaseni}}</td>
-                <td>{{@zavodnik.schvaleno == 1 ? 'Schváleno' : (@zavodnik.schvaleno == 0 ? 'Neschváleno' : (@zavodnik.schvaleno == 2 ? 'Zamítnuto' : 'Neznámá hodnota'))}}</td>
-                <td>{{@zavodnik.zamitnuti}}</td>
                 <td>
                     <form method="POST" action="smazatSe/">
                     <input type="hidden" name="id" value="{{@zavodnik.id}}">
@@ -96,7 +131,7 @@ Závody které jsou v běhu
     <tbody>
     <repeat group="{{@zavodnici}}" value="{{@zavodnik}}">
         <check if="{{@zavodnik.id_zavodnika == @SESSION.user.id}}">
-            <check if="{{@zavodnik.stav==1}}">
+            <check if="{{@zavodnik.stav==1 and @zavodnik.schvaleno!=0}}">
                 <tr>
                     <td>{{@zavodnik.id_zavodnika}}</td>
                     <td>{{@zavodnik.id_zavodu}}</td>
