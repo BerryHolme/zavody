@@ -5,7 +5,9 @@
     <title>Nový závod</title>
 </head>
 <body>
+<include href="rozcestnik.html" />
 <h1>Vytvořte nový závod</h1>
+
 
 <form method="POST" enctype="multipart/form-data">
     <div id="novyzavod_error" class="novyzavod_error">{{@error_zavod}}</div>
@@ -39,14 +41,6 @@
     <input type="number" id="delka" name="delka" placeholder="123">
 
     <br>
-
-    <label for="otevreno">Otevřeno: </label>
-    <input type="checkbox" id="otevreno" name="otevreno">
-
-
-    <br>
-
-
 
     <input type=submit value="Vytvořit">
 </form>

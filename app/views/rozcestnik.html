@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        /* Tento styl zůstává nezměněn */
+        .dropbtn {
+            background-color: #04AA6D;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .user-image {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown:hover .dropbtn {
+            background-color: #3e8e41;
+        }
+
+        /* Styl pro druhý úroveň dropdownu */
+        .sub-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .sub-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            top: 0;
+            left: 100%;
+        }
+
+        .sub-dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .sub-dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .sub-dropbtn {
+            background-color: #04AA6D;
+            color: white;
+            padding: 12px 16px;
+            font-size: 16px;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            display: block;
+            width: 140%;
+        }
+
+        .sub-dropbtn:hover {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dropdown">
+    <button class="dropbtn">
+        {{@SESSION.user.jmeno}} {{@SESSION.user.prijmeni}}
+    </button>
+    <div class="dropdown-content">
+        <a href="/zavody/nastenka/">Domů</a>
+        <a href="/zavody/ucet/">Nastavení účtu</a>
+        <a href="/zavody/mojeZavody/">Moje závody</a>
+
+        <!-- Podmínka pro zobrazení sub-dropdownu pouze pro role 1 -->
+        {{@SESSION.user.role == 1 ? '
+        <div class="sub-dropdown">
+            <div class="sub-dropbtn">Pořadatel <span class="caret"></span></div>
+            <div class="sub-dropdown-content">
+                <a href="/zavody/admin/">Administrace</a>
+                <a href="/zavody/nejakaStranka/">Další odkaz</a>
+            </div>
+        </div>
+        ' : ''}}
+
+        <a href="/zavody/odhlasit/">Odhlásit se</a>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $('.sub-dropdown').on("click", function(e){
+            var subDropdownContent = $(this).find('.sub-dropdown-content');
+            subDropdownContent.toggle();
+            e.stopPropagation();
+        });
+
+        $(document).click(function (e) {
+            var container = $(".dropdown");
+            if (!container.is(e.target) && container.has(e.target).length === 0) {
+                $('.dropdown-content').hide();
+                $('.sub-dropdown-content').hide();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

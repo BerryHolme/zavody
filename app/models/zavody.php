@@ -17,7 +17,6 @@ class zavody extends Cortex
         'cil' => ['type' => 'VARCHAR256', 'nullable' => false],
         'delka' => ['type' => 'VARCHAR256', 'nullable' => false],
         'image' => ['type' => 'LONGBLOB', 'nullable' => false],
-        'otevreno' => ['type' => 'BOOL', 'nullable' => false],
-        'skoncil' => ['type' => 'BOOL', 'nullable' => false],
+        'stav' => ['type' => 'INT', 'nullable' => false],
     ];
 }

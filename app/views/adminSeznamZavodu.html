@@ -3,86 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Nastenka</title>
-
-    <style>
-        .dropbtn {
-            background-color: #04AA6D;
-            color: white;
-            padding: 16px;
-            font-size: 16px;
-            border: none;
-            display: flex; /* Allow flexbox layout */
-            align-items: center; /* Center items vertically in flex container */
-        }
-
-        .user-image {
-            width: 30px; /* Set the width of the user image */
-            height: 30px; /* Set the height of the user image */
-            border-radius: 50%; /* Make the image circular */
-            margin-right: 10px; /* Add some margin to separate the image from text */
-        }
-
-        /* The container <div> - needed to position the dropdown content */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        /* Dropdown Content (Hidden by Default) */
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f1f1f1;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-
-        /* Links inside the dropdown */
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-
-        /* Change color of dropdown links on hover */
-        .dropdown-content a:hover {
-            background-color: #ddd;
-        }
-
-        /* Show the dropdown menu on hover */
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        /* Change the background color of the dropdown button when the dropdown content is shown */
-        .dropdown:hover .dropbtn {
-            background-color: #3e8e41;
-        }
-
-    </style>
 </head>
 <body>
-
+<include href="rozcestnik.html" />
 <h1>Seznam závodů</h1>
 
-<div class="dropdown">
-    <button class="dropbtn">
-        {{@SESSION.user.jmeno}}
-        {{@SESSION.user.prijmeni}}
-        {{@SESSION.user.role == 1 ? 'Pořadatel' : (@SESSION.user.role == 0 ? '' : '')}}
-    </button>
-    <div class="dropdown-content">
-        <a href="nastenka/">Domů</a>
-        <a href="ucet/">Nastavení účtu</a>
-        <a href="#">Přihlášené závody</a>
-        {{@SESSION.user.role == 1 ? '<a href="admin/">Pořadatel</a>' : (@SESSION.user.role == 0 ? '' : '')}}
-        <a href="odhlasit/">Odhlásit se</a>
-    </div>
-</div>
+{{@zavody_error}}
 
 
+
+Nezapočaté závody
 <table>
     <thead>
     <th>ID</th>
@@ -92,10 +22,14 @@
     <th>Start</th>
     <th>Cíl</th>
     <th>Délka</th>
+    <th>Stav</th>
     <th>Zavodnici v zavode</th>
+    <th>Start</th>
+
     </thead>
     <tbody>
     <repeat group="{{@zavody}}" value="{{@zavod}}">
+        <check if="{{@zavod.stav==0}}">
         <tr>
             <td>{{@zavod.id}}</td>
             <td>{{@zavod.jmeno}}</td>
@@ -104,6 +38,7 @@
             <td>{{@zavod.start}}</td>
             <td>{{@zavod.cil}}</td>
             <td>{{@zavod.delka}}</td>
+            <td>{{@zavod.stav}}</td>
 
             <td>
                 <form method="POST" action="adminSeznamZavodniku/">
@@ -112,7 +47,112 @@
                 </form>
 
             </td>
+
+            <td>
+                <form method="POST" action="start/">
+                    <input type="hidden" name="id_zavodu" value="{{@zavod.id}}">
+                    <input type="submit" value="Start">
+                </form>
+
+            </td>
+
         </tr>
+        </check>
+    </repeat>
+    </tbody>
+</table>
+
+<br>
+
+Závody v běhu
+<table>
+    <thead>
+    <th>ID</th>
+    <th>Jméno</th>
+    <th>Datum</th>
+    <th>Čas</th>
+    <th>Start</th>
+    <th>Cíl</th>
+    <th>Délka</th>
+    <th>Stav</th>
+    <th>Zavodnici v zavode</th>
+    <th>Ukončit</th>
+
+    </thead>
+    <tbody>
+    <repeat group="{{@zavody}}" value="{{@zavod}}">
+        <check if="{{@zavod.stav==1}}">
+            <tr>
+                <td>{{@zavod.id}}</td>
+                <td>{{@zavod.jmeno}}</td>
+                <td>{{@zavod.datum}}</td>
+                <td>{{@zavod.cas}}</td>
+                <td>{{@zavod.start}}</td>
+                <td>{{@zavod.cil}}</td>
+                <td>{{@zavod.delka}}</td>
+                <td>{{@zavod.stav}}</td>
+
+                <td>
+                    <form method="POST" action="adminSeznamZavodniku/">
+                        <input type="hidden" name="id_zavodu" value="{{@zavod.id}}">
+                        <input type="submit" value="Zobrazit zavodniky">
+                    </form>
+
+                </td>
+
+                <td>
+                    <form method="POST" action="konec/">
+                        <input type="hidden" name="id_zavodu" value="{{@zavod.id}}">
+                        <input type="submit" value="Konec">
+                    </form>
+
+                </td>
+
+            </tr>
+        </check>
+    </repeat>
+    </tbody>
+</table>
+
+<br>
+
+Ukončené závody
+<table>
+    <thead>
+    <th>ID</th>
+    <th>Jméno</th>
+    <th>Datum</th>
+    <th>Čas</th>
+    <th>Start</th>
+    <th>Cíl</th>
+    <th>Délka</th>
+    <th>Stav</th>
+    <th>Pořadník</th>
+
+    </thead>
+    <tbody>
+    <repeat group="{{@zavody}}" value="{{@zavod}}">
+        <check if="{{@zavod.stav==2}}">
+            <tr>
+                <td>{{@zavod.id}}</td>
+                <td>{{@zavod.jmeno}}</td>
+                <td>{{@zavod.datum}}</td>
+                <td>{{@zavod.cas}}</td>
+                <td>{{@zavod.start}}</td>
+                <td>{{@zavod.cil}}</td>
+                <td>{{@zavod.delka}}</td>
+                <td>{{@zavod.stav}}</td>
+
+                <td>
+                    <form method="POST" action="poradnik/">
+                        <input type="hidden" name="id_zavodu" value="{{@zavod.id}}">
+                        <input type="submit" value="Zobrazit pořadník">
+                    </form>
+
+                </td>
+
+            </tr>
+        </check>
     </repeat>
     </tbody>
 </table>

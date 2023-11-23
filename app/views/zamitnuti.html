@@ -6,6 +6,7 @@
 </head>
 <body>
 <h1>Zamítnutí žádosti uživatele {{@jmeno}} {{@prijmeni}} v závodě {{@jmenoZavodu}}  </h1>
+<include href="rozcestnik.html" />
 
 <form method="post" action="/zavody/zrusitZamitnuti/">
     <input type="hidden" id="id_zavodu" name="id_zavodu" value="{{@id_zavodu}}" >

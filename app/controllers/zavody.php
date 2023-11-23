@@ -90,6 +90,8 @@ class zavody
             $zavod = (new \models\zavody)->find([], ['order' => 'id DESC']);
             $base->set('zavody', $zavod);
 
+            $base->set('zavody_error', '');
+
 
             echo \Template::instance()->render("adminSeznamZavodu.html");
         }else $base->reroute("/prihlaseni");
@@ -119,6 +121,7 @@ class zavody
         foreach ($zavodnici as $zavodnik){
             if ($zavodnik->id_zavodu == $idZavodu && $zavodnik->id_zavodnika == $idZavodnika) {
                 $zavodnik->schvaleno = 1;
+                $zavodnik->zamitnuti = '';
                 $zavodnik->save();
             }
         }
@@ -161,16 +164,20 @@ class zavody
 
     public function postOdeslat(\Base $base)
     {
-        $id = $_POST['id'];
-        $zavod = $_POST['zavod'];
+        $idZavodnika = $_POST['id'];
+        $idZavodu = $_POST['zavod'];
         $zamitnuti = $_POST['zamitnuti'];
-        $zavodnik = (new \models\zavodnik)->findone("id_zavodnika"== $id);
 
-        $zavodnik->schvaleno = 2;
-        $zavodnik->zamitnuti = $zamitnuti;
-        $zavodnik->save();
+        $zavodnici = (new \models\zavodnik)->find(['id_zavodnika', $idZavodnika]);
 
-        $base->set('zavod', $zavod);
+        foreach ($zavodnici as $zavodnik){
+            if ($zavodnik->id_zavodu == $idZavodu && $zavodnik->id_zavodnika == $idZavodnika) {
+                $zavodnik->schvaleno = 2;
+                $zavodnik->zamitnuti = $zamitnuti;
+                $zavodnik->save();
+            }
+        }
+        $base->set('zavod', $idZavodu);
         echo \Template::instance()->render("uspesneOdeslano.html");
     }
 
@@ -200,6 +207,126 @@ class zavody
         $zavodnik = $zavidnik->findone(["id=?",$id]);
         $zavodnik ->erase();
         $base ->reroute("nastenka/");;
+    }
+
+    public function postStart(\Base $base)
+    {
+        $idZavodu = $_POST['id_zavodu'];
+        $zavody = new \models\zavody();
+        $zavod = $zavody->findone(['id=?', $idZavodu]);
+
+        $zavodnici = (new \models\zavodnik)->find(['id_zavodu=?', $idZavodu], ['order' => 'schvaleno ASC']);
+
+
+        if($zavod->stav==0){
+            $zavod->stav = 1;
+            $zavod->save();
+            foreach ($zavodnici as $zavodnik){
+                $zavodnik->set('start_cas', date("Y-m-d H:i:s"));
+                $zavodnik->stav=1;
+                $zavodnik->save();
+            }
+            $base->set('zavodnici', $zavodnici);
+            $base->set('zavod', $zavod);
+            echo \Template::instance()->render('probihajiciZavod.html');
+
+        }elseif ($zavod->stav==1){
+            $base->set('zavodnici', $zavodnici);
+            $base->set('zavod', $zavod);
+            echo \Template::instance()->render('probihajiciZavod.html');
+
+        }else{
+            $user = new \models\User();
+            $base->set('user', $user->find());
+
+            $zavod = (new \models\zavody)->find([], ['order' => 'id DESC']);
+            $base->set('zavody', $zavod);
+
+            $base->set('zavody_error', 'Závod už skončil');
+
+            echo \Template::instance()->render("adminSeznamZavodu.html");
+        }
+
+    }
+
+    public function postCil(\Base $base)
+    {
+        $zavodnikId = $_POST['zavodnik'];
+        $idZavodu = $_POST['id_zavodu'];
+        $zavodnici = (new \models\zavodnik)->find(['id_zavodu=?', $idZavodu], ['order' => 'delka_zavodu ASC']);
+        //$zavodnik = $zavodnici->findone(['id' => $zavodnikId]);
+
+        foreach ($zavodnici as $zavodnik){
+            if($zavodnik->stav == 0 and $zavodnik->id==$zavodnikId){
+                $zavodnik->cil_cas = date("Y-m-d H:i:s");
+                $startCasTimestamp = strtotime($zavodnik->start_cas);
+                $cilCasTimestamp = strtotime($zavodnik->cil_cas);
+
+                $rozdiel = $cilCasTimestamp - $startCasTimestamp;
+
+                $zavodnik->delka_zavodu = date("H:i:s", $rozdiel);
+                $zavodnik->stav = 1;
+                $zavodnik->save();
+            }
+        }
+
+        $zavody = new \models\zavody();
+        $zavod = $zavody->findone(['id=?', $idZavodu]);
+        $zavodnici = (new \models\zavodnik)->find(['id_zavodu=?', $idZavodu], ['order' => 'schvaleno ASC']);
+
+        $base->set('zavodnici', $zavodnici);
+        $base->set('zavod', $zavod);
+        echo \Template::instance()->render('probihajiciZavod.html');
+
+
+    }
+
+    public function postKonec(\Base $base)
+    {
+        $idZavodu = $_POST['id_zavodu'];
+        $zavody = new \models\zavody();
+        $zavod = $zavody->findone(['id=?', $idZavodu]);
+        $zavodnici = (new \models\zavodnik)->find(['id_zavodu=?', $idZavodu], ['order' => 'delka_zavodu ASC']);
+        if($zavod->stav==1){
+            $poradi = 0;
+            foreach ($zavodnici as $zavodnik){
+                if($zavodnik->stav==0) {
+                    $zavodnik->stav=3;
+                    $zavodnik->save();
+                }elseif ($zavodnik->stav==1){
+                    $poradi++;
+                    $zavodnik->poradi = $poradi;
+                    $zavodnik->stav=2;
+                    $zavodnik->save();
+                }else {
+                    $zavodnik->zamitnuti = 'Nedokončil';
+                    $zavodnik->save();
+                }
+
+            }
+            $zavod->stav=2;
+            $zavod->save();
+        }elseif ($zavod->stav==0) {
+            echo('Závod eště nezačal');
+        }else{
+            echo('Závod skončil');
+        }
+
+        $base->set('zavodnici', $zavodnici);
+        $base->set('zavod', $zavod);
+        echo \Template::instance()->render('konec.html');
+    }
+
+    public function postPoradnik(\Base $base)
+    {
+        $idZavodu = $_POST['id_zavodu'];
+        $zavody = new \models\zavody();
+        $zavod = $zavody->findone(['id=?', $idZavodu]);
+        $zavodnici = (new \models\zavodnik)->find(['id_zavodu=?', $idZavodu], ['order' => 'poradi ASC']);
+
+        $base->set('zavodnici', $zavodnici);
+        $base->set('zavod', $zavod);
+        echo \Template::instance()->render('poradnik.html');
     }
 
 }

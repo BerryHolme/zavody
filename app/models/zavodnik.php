@@ -15,6 +15,9 @@ class zavodnik extends Cortex
         'delka_zavodu' => ['type' => 'TIME', 'nullable' => false],
         'poradi' => ['type' => 'INT', 'nullable' => false],
         'zamitnuti' => ['type' => 'LONGTEXT', 'nullable' => false],
+        'start_cas' => ['type' => 'DATETIME', 'nullable' => false],
+        'cil_cas' => ['type' => 'DATEIME', 'nullable' => false],
+        'stav' => ['type' => 'INT', 'nullable' => false],
     ];
 
     // Add foreign key constraint

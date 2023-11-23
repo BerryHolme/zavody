@@ -5,16 +5,18 @@
     <title>Moje zavody</title>
 </head>
 <body>
+<include href="rozcestnik.html" />
 
 <h1>Moje závody</h1>
+
+
+Závody které eště nezačali
 <table>
     <thead>
     <tr>
         <th>ID závodníka</th>
         <th>ID závodu</th>
         <th>Datum přihlášení</th>
-        <th>Délka závodu</th>
-        <th>Pořadí</th>
         <th>Schválení</th>
         <th>Zamítnutí</th>
         <th>Odhlásit se ze závodu</th>
@@ -23,12 +25,11 @@
     <tbody>
     <repeat group="{{@zavodnici}}" value="{{@zavodnik}}">
         <check if="{{@zavodnik.id_zavodnika == @SESSION.user.id}}">
+            <check if="{{@zavodnik.stav==0}}">
             <tr>
                 <td>{{@zavodnik.id_zavodnika}}</td>
                 <td>{{@zavodnik.id_zavodu}}</td>
                 <td>{{@zavodnik.datum_prihlaseni}}</td>
-                <td>{{@zavodnik.delka_zavodu}}</td>
-                <td>{{@zavodnik.poradi}}</td>
                 <td>{{@zavodnik.schvaleno == 1 ? 'Schváleno' : (@zavodnik.schvaleno == 0 ? 'Neschváleno' : (@zavodnik.schvaleno == 2 ? 'Zamítnuto' : 'Neznámá hodnota'))}}</td>
                 <td>{{@zavodnik.zamitnuti}}</td>
                 <td>
@@ -36,8 +37,106 @@
                     <input type="hidden" name="id" value="{{@zavodnik.id}}">
                     <input type="submit" value="Odhlásit se ze závodu">
                 </form>
+
                 </td>
             </tr>
+            </check>
+        </check>
+    </repeat>
+    </tbody>
+</table>
+
+<br>
+
+Závody které skončili
+<table>
+    <thead>
+    <tr>
+        <th>ID závodníka</th>
+        <th>ID závodu</th>
+        <th>Délka závodu</th>
+        <th>Pořadí</th>
+        <th>Pořadník</th>
+    </tr>
+    </thead>
+    <tbody>
+    <repeat group="{{@zavodnici}}" value="{{@zavodnik}}">
+        <check if="{{@zavodnik.id_zavodnika == @SESSION.user.id}}">
+            <check if="{{@zavodnik.stav==2}}">
+                <tr>
+                    <td>{{@zavodnik.id_zavodnika}}</td>
+                    <td>{{@zavodnik.id_zavodu}}</td>
+                    <td>{{@zavodnik.delka_zavodu}}</td>
+                    <td>{{@zavodnik.poradi}}</td>
+                    <td>
+                        <form method="POST" action="poradnik/">
+                            <input type="hidden" name="id_zavodu" value="{{@zavodnik.id_zavodu}}">
+                            <input type="submit" value="Zobrazit pořadník">
+                        </form>
+                    </td>
+                </tr>
+            </check>
+        </check>
+    </repeat>
+    </tbody>
+</table>
+
+<br>
+
+Závody které jsou v běhu
+<table>
+    <thead>
+    <tr>
+        <th>ID závodníka</th>
+        <th>ID závodu</th>
+        <th>Datum přihlášení</th>
+        <th>Čas startu</th>
+    </tr>
+    </thead>
+    <tbody>
+    <repeat group="{{@zavodnici}}" value="{{@zavodnik}}">
+        <check if="{{@zavodnik.id_zavodnika == @SESSION.user.id}}">
+            <check if="{{@zavodnik.stav==1}}">
+                <tr>
+                    <td>{{@zavodnik.id_zavodnika}}</td>
+                    <td>{{@zavodnik.id_zavodu}}</td>
+                    <td>{{@zavodnik.datum_prihlaseni}}</td>
+                    <td>{{@zavodnik.start_cas}}</td>
+                </tr>
+            </check>
+        </check>
+    </repeat>
+    </tbody>
+</table>
+
+<br>
+
+Závody které jste nedoběhli
+<table>
+    <thead>
+    <tr>
+        <th>ID závodníka</th>
+        <th>ID závodu</th>
+        <th>Datum přihlášení</th>
+        <th>Pořadník</th>
+    </tr>
+    </thead>
+    <tbody>
+    <repeat group="{{@zavodnici}}" value="{{@zavodnik}}">
+        <check if="{{@zavodnik.id_zavodnika == @SESSION.user.id}}">
+            <check if="{{@zavodnik.stav==3}}">
+                <tr>
+                    <td>{{@zavodnik.id_zavodnika}}</td>
+                    <td>{{@zavodnik.id_zavodu}}</td>
+                    <td>{{@zavodnik.datum_prihlaseni}}</td>
+                    <td>
+                        <form method="POST" action="poradnik/">
+                            <input type="hidden" name="id_zavodu" value="{{@zavodnik.id_zavodu}}">
+                            <input type="submit" value="Zobrazit pořadník">
+                        </form>
+                    </td>
+                </tr>
+            </check>
         </check>
     </repeat>
     </tbody>

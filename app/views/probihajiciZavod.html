@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Probíhající závod</title>
+</head>
+<body>
+<include href="rozcestnik.html" />
+<a href="/zavody/adminSeznamZavodu/">Zpět</a>
+
+<h1>Právě probíhá závod {{@zavod.jmeno}}</h1>
+
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>ID závodníka</th>
+        <th>ID závodu</th>
+        <th>Pořadí</th>
+        <th>Čas startu</th>
+        <th>Čas v cíli</th>
+        <th>Délka závodu</th>
+        <th>Cíl</th>
+    </tr>
+    </thead>
+    <tbody>
+    <repeat group="{{@zavodnici}}" value="{{@zavodnik}}">
+        <check if="{{@zavodnik.schvaleno}}==1">
+
+            <tr>
+                <td>{{@zavodnik.id}}</td>
+                <td>{{@zavodnik.id_zavodnika}}</td>
+                <td>{{@zavodnik.id_zavodu}}</td>
+                <td>{{@zavodnik.poradi}}</td>
+                <td>{{@zavodnik.start_cas}}</td>
+                <td>{{@zavodnik.cil_cas}}</td>
+                <td>{{@zavodnik.delka_zavodu}}</td>
+                <td>
+                    <form method="post" action="/zavody/cil/">
+                        <input type="hidden" name="zavodnik" value="{{@zavodnik.id}}">
+                        <input type="hidden" name="id_zavodu" value="{{@zavodnik.id_zavodu}}">
+                        <input type="submit" value="Cíl">
+                    </form>
+                </td>
+            </tr>
+        </check>
+    </repeat>
+    </tbody>
+</table>
+</body>
+</html>

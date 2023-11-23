@@ -2,20 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Zavodnici</title>
+    <title>Konec</title>
 </head>
 <body>
 <include href="rozcestnik.html" />
-
-<h1>Seznam závodníků</h1>
-
+<a href="/zavody/adminSeznamZavodu/">Zpět</a>
+<h1>Konec závodu {{@zavod.jmeno}}</h1>
 <table>
     <thead>
     <tr>
         <th>ID závodníka</th>
         <th>ID závodu</th>
-        <th>Schváleno</th>
-        <th>Datum přihlášení</th>
         <th>Délka závodu</th>
         <th>Pořadí</th>
     </tr>
@@ -25,15 +22,11 @@
         <tr>
             <td>{{@zavodnik.id_zavodnika}}</td>
             <td>{{@zavodnik.id_zavodu}}</td>
-            <td>{{@zavodnik.schvaleno}}</td>
-            <td>{{@zavodnik.datum_prihlaseni}}</td>
             <td>{{@zavodnik.delka_zavodu}}</td>
             <td>{{@zavodnik.poradi}}</td>
         </tr>
     </repeat>
     </tbody>
 </table>
-
-
 </body>
 </html>
