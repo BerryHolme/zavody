@@ -3,16 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <title>Pořadník</title>
-</head>
-<body>
-<include href="rozcestnik.html" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
 
-<h1>Pořadník závodu {{@zavod.jmeno}}</h1>
+        header {
+            background-color: #ffffff;
+            text-align: left;
+            padding: 10px;
+            box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
+            color: red;
+            display: flex;
+            justify-content: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: red;
+
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        input[type="submit"] {
+            background-color: #d54949;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #e01e06;
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <div><h1>Pořadník závodu {{@zavod.jmeno}}</h1></div>
+</header>
+<div><include href="rozcestnik.html" /></div>
+
 <table>
     <thead>
     <tr>
-        <th>ID závodníka</th>
-        <th>ID závodu</th>
+        <th>Jméno závodníka</th>
+        <th>Závod</th>
         <th>Délka závodu</th>
         <th>Pořadí</th>
     </tr>
@@ -20,8 +74,8 @@
     <tbody>
     <repeat group="{{@zavodnici}}" value="{{@zavodnik}}">
         <tr>
-            <td>{{@zavodnik.id_zavodnika}}</td>
-            <td>{{@zavodnik.id_zavodu}}</td>
+            <td>{{@zavodnik.jmeno}} {{@zavodnik.prijmeni}}</td>
+            <td>{{@zavodnik.zavod}}</td>
             <td>{{@zavodnik.delka_zavodu}}</td>
             <td>{{@zavodnik.poradi}}</td>
         </tr>

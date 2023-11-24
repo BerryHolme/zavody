@@ -3,8 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>Váš účet</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #ffffff;
+            text-align: left;
+            padding: 10px;
+            box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
+            color: red;
+            display: flex;
+            justify-content: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: red;
+
+        }
+    </style>
 </head>
+
 <body>
-<include href="rozcestnik.html" />
+<header>
+    <div><h1>Váš účet</h1></div>
+</header>
+<div><include href="rozcestnik.html" /></div>
+
+Jméno: {{@SESSION.user.jmeno}} <br>
+Příjmení: {{@SESSION.user.prijmeni}} <br>
+Email: {{@SESSION.user.email}} <br>
+
+
 </body>
 </html>

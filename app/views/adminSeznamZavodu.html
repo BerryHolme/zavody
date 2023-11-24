@@ -2,17 +2,73 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="\css\tables.css">
     <title>Nastenka</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #ffffff;
+            text-align: left;
+            padding: 10px;
+            box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
+            color: red;
+            display: flex;
+            justify-content: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: red;
+
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        input[type="submit"] {
+            background-color: #d54949;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #e01e06;
+        }
+
+    </style>
 </head>
+
 <body>
-<include href="rozcestnik.html" />
-<h1>Seznam závodů</h1>
+<header>
+    <div><h1>Správa závodů</h1></div>
+</header>
+<div><include href="rozcestnik.html" /></div>
 
 {{@zavody_error}}
 
 
 
-Nezapočaté závody
+<h2>Nezapočaté závody</h2>
 <table>
     <thead>
     <th>ID</th>
@@ -22,7 +78,6 @@ Nezapočaté závody
     <th>Start</th>
     <th>Cíl</th>
     <th>Délka</th>
-    <th>Stav</th>
     <th>Zavodnici v zavode</th>
     <th>Start</th>
 
@@ -38,7 +93,6 @@ Nezapočaté závody
             <td>{{@zavod.start}}</td>
             <td>{{@zavod.cil}}</td>
             <td>{{@zavod.delka}}</td>
-            <td>{{@zavod.stav}}</td>
 
             <td>
                 <form method="POST" action="adminSeznamZavodniku/">
@@ -64,7 +118,7 @@ Nezapočaté závody
 
 <br>
 
-Závody v běhu
+<h2>Závody v běhu</h2>
 <table>
     <thead>
     <th>ID</th>
@@ -74,7 +128,6 @@ Závody v běhu
     <th>Start</th>
     <th>Cíl</th>
     <th>Délka</th>
-    <th>Stav</th>
     <th>Zavodnici v zavode</th>
     <th>Ukončit</th>
 
@@ -90,10 +143,9 @@ Závody v běhu
                 <td>{{@zavod.start}}</td>
                 <td>{{@zavod.cil}}</td>
                 <td>{{@zavod.delka}}</td>
-                <td>{{@zavod.stav}}</td>
 
                 <td>
-                    <form method="POST" action="adminSeznamZavodniku/">
+                    <form method="POST" action="start/">
                         <input type="hidden" name="id_zavodu" value="{{@zavod.id}}">
                         <input type="submit" value="Zobrazit zavodniky">
                     </form>
@@ -116,7 +168,7 @@ Závody v běhu
 
 <br>
 
-Ukončené závody
+<h2>Ukončené závody</h2>
 <table>
     <thead>
     <th>ID</th>
@@ -126,7 +178,6 @@ Ukončené závody
     <th>Start</th>
     <th>Cíl</th>
     <th>Délka</th>
-    <th>Stav</th>
     <th>Pořadník</th>
 
     </thead>
@@ -141,7 +192,6 @@ Ukončené závody
                 <td>{{@zavod.start}}</td>
                 <td>{{@zavod.cil}}</td>
                 <td>{{@zavod.delka}}</td>
-                <td>{{@zavod.stav}}</td>
 
                 <td>
                     <form method="POST" action="poradnik/">

@@ -3,51 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <title>Zavodnici</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #ffffff;
+            text-align: left;
+            padding: 10px;
+            box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
+            color: red;
+            display: flex;
+            justify-content: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: red;
+
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        input[type="submit"] {
+            background-color: #d54949;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #e01e06;
+        }
+    </style>
 </head>
+
 <body>
-<include href="rozcestnik.html" />
-<a href="/zavody/adminSeznamZavodu/">Zpět</a>
-<h1>Seznam Závodníků</h1>
+<header>
+    <div><h1>Domovská obrazovka</h1></div>
+</header>
+<div><include href="rozcestnik.html" /></div>
+
+<h2>Schváleno</h2>
 <table>
     <thead>
     <tr>
-        <th>ID závodníka</th>
-        <th>ID závodu</th>
+        <th>Startovací číslo</th>
+        <th>Jméno závodníka</th>
+        <th>Jméno závodu</th>
         <th>Datum přihlášení</th>
-        <th>Délka závodu</th>
+        <th>Čas</th>
         <th>Pořadí</th>
-        <th>Schváleno</th>
+        <th>Zamítnout</th>
+    </tr>
+    </thead>
+    <tbody>
+    <repeat group="{{@zavodnici}}" value="{{@zavodnik}}">
+        <check if="{{@zavodnik.schvaleno==1}}">
+        <tr>
+            <td>{{@zavodnik.id}}</td>
+            <td>{{@zavodnik.jmeno}} {{@zavodnik.prijmeni}}</td>
+            <td>{{@zavodnik.zavod}}</td>
+            <td>{{@zavodnik.datum_prihlaseni}}</td>
+            <td>{{@zavodnik.delka_zavodu}}</td>
+            <td>{{@zavodnik.poradi}}</td>
+            <td>
+                <form method="POST" action="/zavody/zamitnout/">
+                    <input type="hidden" name="zavodnik" value="{{@zavodnik.id_zavodnika}}">
+                    <input type="hidden" name="id" value="{{@zavodnik.id}}">
+                    <input type="hidden" name="zavod" value="{{@zavodnik.id_zavodu}}">
+                    <input type="submit" value="Zamítnout">
+                </form>
+            </td>
+        </tr>
+        </check>
+    </repeat>
+    </tbody>
+</table>
+
+<br>
+<h2>Čeká na schválení</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Startovací číslo</th>
+        <th>Jméno závodníka</th>
+        <th>Jméno závodu</th>
+        <th>Datum přihlášení</th>
+        <th>Čas</th>
+        <th>Pořadí</th>
+        <th>Schválit</th>
+    </tr>
+    </thead>
+    <tbody>
+    <repeat group="{{@zavodnici}}" value="{{@zavodnik}}">
+        <check if="{{@zavodnik.schvaleno==0}}">
+            <tr>
+                <td>{{@zavodnik.id}}</td>
+                <td>{{@zavodnik.jmeno}} {{@zavodnik.prijmeni}}</td>
+                <td>{{@zavodnik.zavod}}</td>
+                <td>{{@zavodnik.datum_prihlaseni}}</td>
+                <td>{{@zavodnik.delka_zavodu}}</td>
+                <td>{{@zavodnik.poradi}}</td>
+                <td>
+                    <form method="POST" action="/zavody/schvalit/">
+                        <input type="hidden" name="zavodnik" value="{{@zavodnik.id_zavodnika}}">
+                        <input type="hidden" name="zavod" value="{{@zavodnik.id_zavodu}}">
+                        <input type="submit" value="Schválit">
+                    </form>
+                    <form method="POST" action="/zavody/zamitnout/">
+                        <input type="hidden" name="id" value="{{@zavodnik.id_zavodnika}}">
+                        <input type="hidden" name="zavod" value="{{@zavodnik.id_zavodu}}">
+                        <input type="submit" value="Zamítnout">
+                    </form>
+                </td>
+            </tr>
+        </check>
+    </repeat>
+    </tbody>
+</table>
+
+<br>
+
+<h2>Zamítnuto</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Startovací číslo</th>
+        <th>Jméno závodníka</th>
+        <th>Jméno závodu</th>
+        <th>Datum přihlášení</th>
+        <th>Čas</th>
+        <th>Pořadí</th>
         <th>Schválit</th>
         <th>Důvod</th>
     </tr>
     </thead>
     <tbody>
     <repeat group="{{@zavodnici}}" value="{{@zavodnik}}">
-        <tr>
-            <td>{{@zavodnik.id_zavodnika}}</td>
-            <td>{{@zavodnik.id_zavodu}}</td>
-            <td>{{@zavodnik.datum_prihlaseni}}</td>
-            <td>{{@zavodnik.delka_zavodu}}</td>
-            <td>{{@zavodnik.poradi}}</td>
-            <td>{{@zavodnik.schvaleno == 1 ? 'Schváleno' : (@zavodnik.schvaleno == 0 ? 'Neschváleno' : (@zavodnik.schvaleno == 2 ? 'Zamítnuto' : 'Neznámá hodnota'))}}</td>
-            <td>
-                <form method="POST" action="/zavody/schvalit/">
-                    <input type="hidden" name="zavodnik" value="{{@zavodnik.id_zavodnika}}">
-                    <input type="hidden" name="zavod" value="{{@zavodnik.id_zavodu}}">
-                    <input type="submit" value="Schválit">
-                </form>
-                <form method="POST" action="/zavody/zamitnout/">
-                    <input type="hidden" name="id" value="{{@zavodnik.id_zavodnika}}">
-                    <input type="hidden" name="zavod" value="{{@zavodnik.id_zavodu}}">
-                    <input type="submit" value="Zamítnout">
-                </form>
-            </td>
-            <td>{{@zavodnik.zamitnuti}}</td>
-        </tr>
+        <check if="{{@zavodnik.schvaleno==2}}">
+            <tr>
+                <td>{{@zavodnik.id}}</td>
+                <td>{{@zavodnik.jmeno}} {{@zavodnik.prijmeni}}</td>
+                <td>{{@zavodnik.zavod}}</td>
+                <td>{{@zavodnik.datum_prihlaseni}}</td>
+                <td>{{@zavodnik.delka_zavodu}}</td>
+                <td>{{@zavodnik.poradi}}</td>
+                <td>
+                    <form method="POST" action="/zavody/schvalit/">
+                        <input type="hidden" name="zavodnik" value="{{@zavodnik.id_zavodnika}}">
+                        <input type="hidden" name="zavod" value="{{@zavodnik.id_zavodu}}">
+                        <input type="submit" value="Schválit">
+                    </form>
+                </td>
+                <td>{{@zavodnik.zamitnuti}}</td>
+            </tr>
+        </check>
     </repeat>
     </tbody>
 </table>
-
 
 </body>
 </html>

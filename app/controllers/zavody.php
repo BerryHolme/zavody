@@ -34,7 +34,7 @@ class zavody
             $zavod->save();
             $base->clear("SESSION.zavod");
 
-            $base->reroute("admin/");
+            $base->reroute("nastenka/");
         }
     }
 
@@ -43,6 +43,12 @@ class zavody
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $idZavodnika = $_POST["id_zavodnika"];
             $idZavodu = $_POST["id_zavodu"];
+
+            $zavody = new \models\zavody();
+            $zavod = $zavody->findone(['id=?', $idZavodu]);
+
+            $uzivatele = new \models\User();
+            $uzivatel = $uzivatele->findone(['id=?', $idZavodnika]);
 
             // Zde můžete provést další validace a kontrolu, např. ověření, zda závodník s daným ID existuje a podobně
 
@@ -54,6 +60,9 @@ class zavody
             $zavodnik->set('datum_prihlaseni', date("Y-m-d H:i:s")); // Aktuální datum a čas
             $zavodnik->set('delka_zavodu', null); // Můžete přizpůsobit podle vašich požadavků
             $zavodnik->set('poradi', null); // Můžete přizpůsobit podle vašich požadavků
+            $zavodnik->set('jmeno', $uzivatel->jmeno); // Můžete přizpůsobit podle vašich požadavků
+            $zavodnik->set('prijmeni', $uzivatel->prijmeni); // Můžete přizpůsobit podle vašich požadavků
+            $zavodnik->set('zavod', $zavod->jmeno); // Můžete přizpůsobit podle vašich požadavků
 
             // Uložení závodníka do databáze
             $zavodnik->save();
@@ -134,20 +143,18 @@ class zavody
 
     public function postZamitnout(\Base $base)
     {
-        $id =$_POST['id'];
-        $zavodnik = (new \models\zavodnik)->findone("id_zavodnika"== $id);
-        $uzivatel = (new \models\User)->findone('id'== $zavodnik->id_zavodnika);
-        $jmeno = $uzivatel->jmeno;
-        $prijmeni = $uzivatel->prijmeni;
-        $zavod = (new \models\zavody)->findone('id'== $zavodnik->id_zavodu);
-        $jmenoZavodu = $zavod->jmeno;
-        $id_zavodu = $zavod->id;
+        $id = $_POST['id'];
 
-        $base->set('id', $id);
-        $base->set('jmeno', $jmeno);
-        $base->set('prijmeni', $prijmeni);
-        $base->set('jmenoZavodu', $jmenoZavodu);
-        $base->set('id_zavodu', $id_zavodu);
+        $zavodnici = new \models\zavodnik();
+        $zavodnik = $zavodnici->findone(['id=?', $id]);
+
+        $zavody = new \models\zavody();
+        $zavod = $zavody->findone(['id=?', $zavodnik->id_zavodu]);
+
+
+
+        $base->set('zavodnik', $zavodnik);
+        $base->set('zavod', $zavod);
 
         echo \Template::instance()->render("zamitnuti.html");
 
@@ -164,19 +171,17 @@ class zavody
 
     public function postOdeslat(\Base $base)
     {
-        $idZavodnika = $_POST['id'];
+        $idZavodnika = $_POST['zavodnik'];
         $idZavodu = $_POST['zavod'];
         $zamitnuti = $_POST['zamitnuti'];
 
-        $zavodnici = (new \models\zavodnik)->find(['id_zavodnika', $idZavodnika]);
+        $zavodnici = new \models\zavodnik();
+        $zavodnik = $zavodnici->findone(['id=?', $idZavodnika]);
 
-        foreach ($zavodnici as $zavodnik){
-            if ($zavodnik->id_zavodu == $idZavodu && $zavodnik->id_zavodnika == $idZavodnika) {
-                $zavodnik->schvaleno = 2;
-                $zavodnik->zamitnuti = $zamitnuti;
-                $zavodnik->save();
-            }
-        }
+        $zavodnik->schvaleno = 2;
+        $zavodnik->zamitnuti = $zamitnuti;
+        $zavodnik->save();
+
         $base->set('zavod', $idZavodu);
         echo \Template::instance()->render("uspesneOdeslano.html");
     }
@@ -194,7 +199,7 @@ class zavody
     {
         if($base->get("SESSION.user")){
             $idZavodnika = $base->get('SESSION.user[id]');
-            $zavodnici = (new \models\zavodnik)->find(['id_zavodnika', 'SESSION.user[id]'],['order' => 'datum_prihlaseni ASC']);
+            $zavodnici = (new \models\zavodnik)->find(['id_zavodnika', 'SESSION.user[id]'],['order' => 'datum_prihlaseni DESC']);
             $base->set('zavodnici', $zavodnici);
             echo \Template::instance()->render("mojeZavody.html");
         }else $base->reroute("/prihlaseni");
@@ -222,9 +227,12 @@ class zavody
             $zavod->stav = 1;
             $zavod->save();
             foreach ($zavodnici as $zavodnik){
-                $zavodnik->set('start_cas', date("Y-m-d H:i:s"));
-                $zavodnik->stav=1;
-                $zavodnik->save();
+                if($zavodnik->schvaleno==1){
+                    $zavodnik->set('start_cas', date("Y-m-d H:i:s"));
+                    $zavodnik->stav=1;
+                    $zavodnik->save();
+                }
+
             }
             $base->set('zavodnici', $zavodnici);
             $base->set('zavod', $zavod);
@@ -254,18 +262,18 @@ class zavody
         $zavodnikId = $_POST['zavodnik'];
         $idZavodu = $_POST['id_zavodu'];
         $zavodnici = (new \models\zavodnik)->find(['id_zavodu=?', $idZavodu], ['order' => 'delka_zavodu ASC']);
-        //$zavodnik = $zavodnici->findone(['id' => $zavodnikId]);
 
         foreach ($zavodnici as $zavodnik){
-            if($zavodnik->stav == 0 and $zavodnik->id==$zavodnikId){
+            if($zavodnik->stav == 1 and $zavodnik->id==$zavodnikId){
                 $zavodnik->cil_cas = date("Y-m-d H:i:s");
                 $startCasTimestamp = strtotime($zavodnik->start_cas);
-                $cilCasTimestamp = strtotime($zavodnik->cil_cas);
+                $cilCasTimestamp = strtotime(date("Y-m-d H:i:s"));
 
-                $rozdiel = $cilCasTimestamp - $startCasTimestamp;
+                $rozdil = $cilCasTimestamp - $startCasTimestamp;
 
-                $zavodnik->delka_zavodu = date("H:i:s", $rozdiel);
-                $zavodnik->stav = 1;
+
+                $zavodnik->delka_zavodu = date("Y-m-d H:i:s", $rozdil);
+                $zavodnik->stav = 2;
                 $zavodnik->save();
             }
         }
@@ -293,7 +301,7 @@ class zavody
                 if($zavodnik->stav==0) {
                     $zavodnik->stav=3;
                     $zavodnik->save();
-                }elseif ($zavodnik->stav==1){
+                }elseif ($zavodnik->stav==2){
                     $poradi++;
                     $zavodnik->poradi = $poradi;
                     $zavodnik->stav=2;

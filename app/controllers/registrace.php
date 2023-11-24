@@ -32,31 +32,28 @@ class registrace
 
         $imageFile = $base->FILES['image'];
 
-        // Check if the file was uploaded successfully
-        if ($imageFile['size'] > 0 && $imageFile['error'] === UPLOAD_ERR_OK) {
-            // Check if the image size is less than 1 MB (1 MB = 1024 * 1024 bytes)
-            if ($imageFile['size'] > 1024 * 1024) {
-                // Handle error for image size exceeding 1 MB
-                $base->set('error_msg', 'Obrázek je moc velký Max 1MB');
-                echo \Template::instance()->render("registrace.html");
-                return;
-            }
-
-            // Read the contents of the uploaded file
-            $user->image = file_get_contents($imageFile['tmp_name']);
-        } else {
-            // Handle file upload error
-            $base->set('error_msg', 'Error uploading the image file');
-            echo \Template::instance()->render("registrace.html");
-            return;
-        }
-
         // Save user data to the database
         $user->save();
+
+        // Get the last inserted user ID
+        $userId = $user->id;
+
+        // Set the directory path for saving profiles
+        $profileDirectory = __DIR__ . '/../profiles/';
+
+        // Create the directory if it doesn't exist
+        if (!file_exists($profileDirectory)) {
+            mkdir($profileDirectory, 0777, true);
+        }
+
+        // Move the uploaded image to the profile directory with the user ID as the filename
+        $destinationPath = $profileDirectory . $userId . '.jpg'; // You may need to adjust the file extension based on your needs
+        move_uploaded_file($imageFile['tmp_name'], $destinationPath);
 
         // Redirect to the home page
         $base->reroute("/");
     }
+
 
 
 }

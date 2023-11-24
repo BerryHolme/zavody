@@ -1,18 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Nastenka</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        background-color: #ffffff;
+        text-align: left;
+        padding: 10px;
+        box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
+        color: red;
+        display: flex;
+        justify-content: center;
+    }
+
+    h1 {
+        text-align: center;
+        color: red;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    input[type="submit"] {
+        background-color: #d54949;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #e01e06;
+    }
+</style>
 </head>
+
 <body>
-<include href="rozcestnik.html" />
-
-<h1>Domovská obrazovka</h1>
-
-
-
-
-
+<header>
+    <div><h1>Domovská obrazovka</h1></div>
+</header>
+<div><include href="rozcestnik.html" /></div>
 
 {{@nastenkaError}}
 
@@ -26,10 +70,48 @@
     <th>Cíl</th>
     <th>Délka</th>
     <th>Stav</th>
-    <th>Přihlási se</th>
+    <th>Přihlásit se</th>
     </thead>
     <tbody>
     <repeat group="{{@zavody}}" value="{{@zavod}}">
+        <check if="{{@zavod.stav==0}}">
+        <tr>
+            <td>{{@zavod.id}}</td>
+            <td>{{@zavod.jmeno}}</td>
+            <td>{{@zavod.datum}}</td>
+            <td>{{@zavod.cas}}</td>
+            <td>{{@zavod.start}}</td>
+            <td>{{@zavod.cil}}</td>
+            <td>{{@zavod.delka}}</td>
+            <td>{{@zavod.stav == 0 ? 'Čeká na start' : (@zavod.stav == 1 ? 'Právě probíhá' : 'Ukončen')}}</td>
+            <td>
+                <form method="POST" action="registrovat-do-zavodu/">
+                    <input type="hidden" name="id_zavodnika" value="{{@SESSION.user.id}}">
+                    <input type="hidden" name="id_zavodu" value="{{@zavod.id}}">
+                    <input type="submit" value="Přihlásit">
+                </form>
+            </td>
+        </tr>
+        </check>
+    </repeat>
+    </tbody>
+</table>
+
+<h2>Závody v běhu</h2>
+<table>
+    <thead>
+    <th>ID</th>
+    <th>Jméno</th>
+    <th>Datum</th>
+    <th>Čas</th>
+    <th>Start</th>
+    <th>Cíl</th>
+    <th>Délka</th>
+    <th>Stav</th>
+    </thead>
+    <tbody>
+    <repeat group="{{@zavody}}" value="{{@zavod}}">
+        <check if="{{@zavod.stav==1}}">
             <tr>
                 <td>{{@zavod.id}}</td>
                 <td>{{@zavod.jmeno}}</td>
@@ -38,15 +120,40 @@
                 <td>{{@zavod.start}}</td>
                 <td>{{@zavod.cil}}</td>
                 <td>{{@zavod.delka}}</td>
-                <td>{{@zavod.stav}}</td>
-                <td>
-                    <form method="POST" action="registrovat-do-zavodu/">
-                        <input type="hidden" name="id_zavodnika" value="{{@SESSION.user.id}}">
-                        <input type="hidden" name="id_zavodu" value="{{@zavod.id}}">
-                        <input type="submit" value="Přihlásit">
-                    </form>
+                <td>{{@zavod.stav == 0 ? 'Čeká na start' : (@zavod.stav == 1 ? 'Právě probíhá' : 'Ukončen')}}</td>
                 </td>
             </tr>
+        </check>
+    </repeat>
+    </tbody>
+</table>
+
+<h2>Ukončené závody</h2>
+<table>
+    <thead>
+    <th>ID</th>
+    <th>Jméno</th>
+    <th>Datum</th>
+    <th>Čas</th>
+    <th>Start</th>
+    <th>Cíl</th>
+    <th>Délka</th>
+    <th>Stav</th>
+    </thead>
+    <tbody>
+    <repeat group="{{@zavody}}" value="{{@zavod}}">
+        <check if="{{@zavod.stav==2}}">
+            <tr>
+                <td>{{@zavod.id}}</td>
+                <td>{{@zavod.jmeno}}</td>
+                <td>{{@zavod.datum}}</td>
+                <td>{{@zavod.cas}}</td>
+                <td>{{@zavod.start}}</td>
+                <td>{{@zavod.cil}}</td>
+                <td>{{@zavod.delka}}</td>
+                <td>{{@zavod.stav == 0 ? 'Čeká na start' : (@zavod.stav == 1 ? 'Právě probíhá' : 'Ukončen')}}</td>
+            </tr>
+        </check>
     </repeat>
     </tbody>
 </table>

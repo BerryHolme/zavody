@@ -3,18 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <title>Moje zavody</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #ffffff;
+            text-align: left;
+            padding: 10px;
+            box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
+            color: red;
+            display: flex;
+            justify-content: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: red;
+
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        input[type="submit"] {
+            background-color: #d54949;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #e01e06;
+        }
+    </style>
 </head>
+
 <body>
-<include href="rozcestnik.html" />
+<header>
+    <div><h1>Moje závody</h1></div>
+</header>
+<div><include href="rozcestnik.html" /></div>
 
-<h1>Moje závody</h1>
-
-Závody čeká na schválení
+<h2>Závody kde čekáte na schválení</h2>
 <table>
     <thead>
     <tr>
-        <th>ID závodníka</th>
-        <th>ID závodu</th>
+        <th>Startovací číslo</th>
+        <th>Jméno závodníka</th>
+        <th>Jméno závodu</th>
         <th>Datum přihlášení</th>
         <th>Schválení</th>
         <th>Zamítnutí</th>
@@ -26,8 +79,9 @@ Závody čeká na schválení
         <check if="{{@zavodnik.id_zavodnika == @SESSION.user.id and @zavodnik.schvaleno==0}}">
             <check if="{{@zavodnik.stav!=3}}">
                 <tr>
-                    <td>{{@zavodnik.id_zavodnika}}</td>
-                    <td>{{@zavodnik.id_zavodu}}</td>
+                    <td>{{@zavodnik.id}}</td>
+                    <td>{{@zavodnik.jmeno}} {{@zavodnik.prijmeni}}</td>
+                    <td>{{@zavodnik.zavod}}</td>
                     <td>{{@zavodnik.datum_prihlaseni}}</td>
                     <td>{{@zavodnik.schvaleno == 1 ? 'Schváleno' : (@zavodnik.schvaleno == 0 ? 'Neschváleno' : (@zavodnik.schvaleno == 2 ? 'Zamítnuto' : 'Neznámá hodnota'))}}</td>
                     <td>{{@zavodnik.zamitnuti}}</td>
@@ -49,12 +103,13 @@ Závody čeká na schválení
 <br>
 
 
-Závody které eště nezačali
+<h2>Závody které eště nezačali</h2>
 <table>
     <thead>
     <tr>
-        <th>ID závodníka</th>
-        <th>ID závodu</th>
+        <th>Startovací číslo</th>
+        <th>Jméno závodníka</th>
+        <th>Jméno závodu</th>
         <th>Datum přihlášení</th>
         <th>Odhlásit se ze závodu</th>
     </tr>
@@ -64,8 +119,9 @@ Závody které eště nezačali
         <check if="{{@zavodnik.id_zavodnika == @SESSION.user.id and @zavodnik.schvaleno!=0}}">
             <check if="{{@zavodnik.stav==0}}">
             <tr>
-                <td>{{@zavodnik.id_zavodnika}}</td>
-                <td>{{@zavodnik.id_zavodu}}</td>
+                <td>{{@zavodnik.id}}</td>
+                <td>{{@zavodnik.jmeno}} {{@zavodnik.prijmeni}}</td>
+                <td>{{@zavodnik.zavod}}</td>
                 <td>{{@zavodnik.datum_prihlaseni}}</td>
                 <td>
                     <form method="POST" action="smazatSe/">
@@ -83,13 +139,14 @@ Závody které eště nezačali
 
 <br>
 
-Závody které skončili
+<h2>Závody které skončili</h2>
 <table>
     <thead>
     <tr>
-        <th>ID závodníka</th>
-        <th>ID závodu</th>
-        <th>Délka závodu</th>
+        <th>Startovací číslo</th>
+        <th>Jméno závodníka</th>
+        <th>Jméno závodu</th>
+        <th>Čas</th>
         <th>Pořadí</th>
         <th>Pořadník</th>
     </tr>
@@ -99,8 +156,9 @@ Závody které skončili
         <check if="{{@zavodnik.id_zavodnika == @SESSION.user.id}}">
             <check if="{{@zavodnik.stav==2}}">
                 <tr>
-                    <td>{{@zavodnik.id_zavodnika}}</td>
-                    <td>{{@zavodnik.id_zavodu}}</td>
+                    <td>{{@zavodnik.id}}</td>
+                    <td>{{@zavodnik.jmeno}} {{@zavodnik.prijmeni}}</td>
+                    <td>{{@zavodnik.zavod}}</td>
                     <td>{{@zavodnik.delka_zavodu}}</td>
                     <td>{{@zavodnik.poradi}}</td>
                     <td>
@@ -118,12 +176,13 @@ Závody které skončili
 
 <br>
 
-Závody které jsou v běhu
+<h2>Závody které jsou v běhu</h2>
 <table>
     <thead>
     <tr>
-        <th>ID závodníka</th>
-        <th>ID závodu</th>
+        <th>Startovací číslo</th>
+        <th>Jméno závodníka</th>
+        <th>Jméno závodu</th>
         <th>Datum přihlášení</th>
         <th>Čas startu</th>
     </tr>
@@ -133,8 +192,9 @@ Závody které jsou v běhu
         <check if="{{@zavodnik.id_zavodnika == @SESSION.user.id}}">
             <check if="{{@zavodnik.stav==1 and @zavodnik.schvaleno!=0}}">
                 <tr>
-                    <td>{{@zavodnik.id_zavodnika}}</td>
-                    <td>{{@zavodnik.id_zavodu}}</td>
+                    <td>{{@zavodnik.id}}</td>
+                    <td>{{@zavodnik.jmeno}} {{@zavodnik.prijmeni}}</td>
+                    <td>{{@zavodnik.zavod}}</td>
                     <td>{{@zavodnik.datum_prihlaseni}}</td>
                     <td>{{@zavodnik.start_cas}}</td>
                 </tr>
@@ -146,12 +206,13 @@ Závody které jsou v běhu
 
 <br>
 
-Závody které jste nedoběhli
+<h2>Závody které jste nedoběhli</h2>
 <table>
     <thead>
     <tr>
-        <th>ID závodníka</th>
-        <th>ID závodu</th>
+        <th>Startovací číslo</th>
+        <th>Jméno závodníka</th>
+        <th>Jméno závodu</th>
         <th>Datum přihlášení</th>
         <th>Pořadník</th>
     </tr>
@@ -161,8 +222,9 @@ Závody které jste nedoběhli
         <check if="{{@zavodnik.id_zavodnika == @SESSION.user.id}}">
             <check if="{{@zavodnik.stav==3}}">
                 <tr>
-                    <td>{{@zavodnik.id_zavodnika}}</td>
-                    <td>{{@zavodnik.id_zavodu}}</td>
+                    <td>{{@zavodnik.id}}</td>
+                    <td>{{@zavodnik.jmeno}} {{@zavodnik.prijmeni}}</td>
+                    <td>{{@zavodnik.zavod}}</td>
                     <td>{{@zavodnik.datum_prihlaseni}}</td>
                     <td>
                         <form method="POST" action="poradnik/">

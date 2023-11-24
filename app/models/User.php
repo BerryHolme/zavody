@@ -14,7 +14,7 @@ class User extends Cortex
         'prijmeni' =>['type'=>'VARCHAR256','nullable' =>false],
         'email'=>['type'=>'VARCHAR256','nullable' =>false, 'index'=>true, 'unique'=>true, 'default'=>true],
         'heslo'=>['type'=>'VARCHAR256','nullable' =>false],
-        'image'=>['type'=>'LONGBLOB', 'nullable'=>false],
+        'image'=>['type'=>'VARCHAR256', 'nullable'=>false],
         'souhlas'=>['type'=>'BOOL', 'nullable'=>false],
         'role' =>['type'=>'INT','nullable'=>false],
         'stav' =>['type'=>'INT','nullable'=>false]

@@ -3,20 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <title>Probíhající závod</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #ffffff;
+            text-align: left;
+            padding: 10px;
+            box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
+            color: red;
+            display: flex;
+            justify-content: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: red;
+
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        input[type="submit"] {
+            background-color: #d54949;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #e01e06;
+        }
+    </style>
 </head>
+
 <body>
-<include href="rozcestnik.html" />
+<header>
+    <div><h1>Právě probíhá závod {{@zavod.jmeno}}</h1></div>
+</header>
+<div><include href="rozcestnik.html" /></div>
 <a href="/zavody/adminSeznamZavodu/">Zpět</a>
 
-<h1>Právě probíhá závod {{@zavod.jmeno}}</h1>
 
 
 <table>
     <thead>
     <tr>
-        <th>ID</th>
-        <th>ID závodníka</th>
-        <th>ID závodu</th>
+        <th>Startovací číslo</th>
+        <th>Jméno</th>
+        <th>Závod</th>
         <th>Pořadí</th>
         <th>Čas startu</th>
         <th>Čas v cíli</th>
@@ -30,7 +84,7 @@
 
             <tr>
                 <td>{{@zavodnik.id}}</td>
-                <td>{{@zavodnik.id_zavodnika}}</td>
+                <td>{{@zavodnik.jmeno}} {{@zavodnik.prijmeni}}</td>
                 <td>{{@zavodnik.id_zavodu}}</td>
                 <td>{{@zavodnik.poradi}}</td>
                 <td>{{@zavodnik.start_cas}}</td>

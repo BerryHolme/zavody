@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Konec</title>
+    <title>Správa uživatlů</title>
     <style>
         body {
             margin: 0;
@@ -58,30 +58,31 @@
 
 <body>
 <header>
-    <div><h1>Konec závodu {{@zavod.jmeno}}</h1></div>
+    <div><h1>Správa uživatelů</h1></div>
 </header>
 <div><include href="rozcestnik.html" /></div>
-<a href="/zavody/adminSeznamZavodu/">Zpět</a>
 
 <table>
     <thead>
     <tr>
-        <th>Startovací číslo</th>
+        <th>ID</th>
         <th>Jméno</th>
-        <th>Zavod</th>
-        <th>Délka závodu</th>
-        <th>Pořadí</th>
+        <th>Příjmení</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Stav</th>
     </tr>
     </thead>
     <tbody>
-    <repeat group="{{@zavodnici}}" value="{{@zavodnik}}">
-        <tr>
-            <td>{{@zavodnik.id}}</td>
-            <td>{{@zavodnik.jmeno}} {{@zavodnik.prijmeni}}</td>
-            <td>{{@zavodnik.zavod}}</td>
-            <td>{{@zavodnik.delka_zavodu}}</td>
-            <td>{{@zavodnik.poradi}}</td>
-        </tr>
+    <repeat group="{{@users}}" value="{{@user}}">
+            <tr>
+                <td>{{@user.id}}</td>
+                <td>{{@user.jmeno}}</td>
+                <td>{{@user.prijmeni}}</td>
+                <td>{{@user.email}}</td>
+                <td>{{@user.role == 0 ? 'Uživatel' : (@user.role == 1 ? 'Administrátor' : 'Neznámí')}}</td>
+                <td>{{@user.stav == 0 ? 'Neaktivní' : (@user.stav == 1 ? 'Přihlášen' : 'Neznámí')}}</td>
+            </tr>
     </repeat>
     </tbody>
 </table>

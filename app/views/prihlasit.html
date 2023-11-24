@@ -2,30 +2,96 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Přihaste se</title>
+    <title>Přihlášení</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #e74c3c, #77251b);
+            color: black;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 1);
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 10px;
+            display: block;
+        }
+
+        input {
+            margin-top: 5px;
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #e74c3c;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #c0392b;
+        }
+
+        a {
+            color: #e74c3c;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 <body>
 
-<h1>Přihlášení</h1>
-<div class="container">
 
+<div class="container">
+    <h1>Přihlášení</h1>
     <div id="registration_error" class="registration_error">{{@error_msg_prihlaseni}}</div>
     <form method="POST">
         <label for="email">Email: </label>
         <input type="text" id="email" name="email" required placeholder="Email" >
 
-        <br>
-
         <label for="heslo">Heslo: </label>
         <input type="password" id="heslo" name="heslo" required placeholder="Heslo" >
 
-        <br>
-
-        <input type=submit value="Přihlásit se">
-
+        <input type="submit" value="Přihlásit se">
     </form>
+    <p>Pokud ještě nemáte účet, můžete se <a href="registrace/">registrovat</a></p>
 </div>
 
-Pokud eště nemáte účet můžete se <a href="registrace/">registrovat</a>
 </body>
 </html>

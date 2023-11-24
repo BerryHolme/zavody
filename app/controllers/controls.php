@@ -21,7 +21,7 @@ class controls
                 // If no zavodnik records found, display all zavody without filtering
                 $zavod = (new \models\zavody)->find();
                 $base->set('zavody', $zavod);
-                $base->set('nastenkaError', 'No records found for the current user in the zavodnik table.');
+                $base->set('nastenkaError', 'Pro vás už tu nejsou žádné závody. Zkuste se vrátit za chvíli');
                 echo \Template::instance()->render("nastenka.html");
                 return;
             }
@@ -108,6 +108,13 @@ class controls
             echo \Template::instance()->render("prihlasit.html");
         }*/
         echo \Template::instance()->render("admin.html");
+    }
+
+    public function getUzivatele(\Base $base)
+    {
+        $users = new \models\User();
+        $base->set('users', $users->find());
+        echo \Template::instance()->render("uzivatele.html");
     }
 
 

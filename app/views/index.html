@@ -3,16 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <title>Závody</title>
+    <style>
+        body {
+            background-color: #f8f8f8;
+            color: #333;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #c0392b;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            opacity: 0; /* Přidáno pro animaci */
+            animation: fadeIn 1s forwards; /* Přidáno pro animaci */
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+            opacity: 0; /* Přidáno pro animaci */
+            animation: fadeIn 1s forwards 0.5s; /* Přidáno pro animaci */
+        }
+
+        .button-container a {
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        button {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #c0392b;
+        }
+
+        .about-us {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-    <h1>Vítejte na závodech</h1>
+<header>
+    <h1>Runner - pokročilý systém pro správu závodů</h1>
+</header>
 
-    <a href="prihlaseni/">
-        <button type="button">Přihlásit se</button>
-    </a>
-    <a href="registrace/">
-        <button type="button">Registrovat se</button>
-    </a>
+<div class="button-container">
+    <a href="prihlaseni/"><button type="button">Přihlásit se</button></a>
+    <a href="registrace/"><button type="button">Registrovat se</button></a>
+</div>
 
+<div class="about-us">
+    <h2>O nás</h2>
+    <p>Vítejte v našem pokročilém systému pro správu závodů, Runner! Jsme tým nadšenců, kteří se spojili s cílem zjednodušit a vylepšit závodní události. Naše vášeň pro běhání a organizaci událostí nás vedla k vytvoření tohoto systému, který vám pomůže efektivně spravovat a úspěšně pořádat závody různých typů. Sledujeme svůj sen o vytvoření lepšího prostředí pro běhání a těšíme se na to, že s vámi budeme spolupracovat!</p>
+</div>
+
+<footer>
+    (c) Matouš Suchý 2023
+</footer>
 </body>
 </html>

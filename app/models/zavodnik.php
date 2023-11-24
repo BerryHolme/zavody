@@ -18,6 +18,9 @@ class zavodnik extends Cortex
         'start_cas' => ['type' => 'DATETIME', 'nullable' => false],
         'cil_cas' => ['type' => 'DATEIME', 'nullable' => false],
         'stav' => ['type' => 'INT', 'nullable' => false],
+        'jmeno' => ['type' => 'VARCHAR256', 'nullable' => false],
+        'prijmeni' => ['type' => 'VARCHAR256', 'nullable' => false],
+        'zavod' => ['type' => 'VARCHAR256', 'nullable' => false],
     ];
 
     // Add foreign key constraint
