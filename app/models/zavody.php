@@ -9,14 +9,14 @@ class zavody extends Cortex
 {
     protected $db = 'DB', $table = 'zavody';
     protected $fieldConf = [
-        'id' => ['type' => 'INT', 'nullable' => false],
+        'id' => ['type' => 'INT4', 'nullable' => false],
         'jmeno' => ['type' => 'VARCHAR256', 'nullable' => false],
-        'datum' => ['type' => 'DATE', 'nullable' => false],
-        'cas' => ['type' => 'TIME', 'nullable' => false],
+        'datum' => ['type' => 'DATETIME', 'nullable' => false],
+        'cas' => ['type' => 'DATETIME', 'nullable' => false],
         'start' => ['type' => 'VARCHAR256', 'nullable' => false],
         'cil' => ['type' => 'VARCHAR256', 'nullable' => false],
         'delka' => ['type' => 'VARCHAR256', 'nullable' => false],
-        'image' => ['type' => 'LONGBLOB', 'nullable' => false],
-        'stav' => ['type' => 'INT', 'nullable' => false],
+        'image' => ['type' => 'VARCHAR256', 'nullable' => false],
+        'stav' => ['type' => 'INT4', 'nullable' => false],
     ];
 }

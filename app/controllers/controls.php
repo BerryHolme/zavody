@@ -54,6 +54,17 @@ class controls
         }
     }
 
+    public function install(\Base $base)
+    {
+        \models\User::setdown();
+        \models\zavodnik::setdown();
+        \models\zavody::setdown();
+
+        \models\User::setup();
+        \models\zavodnik::setup();
+        \models\zavody::setup();
+    }
+
 
 
 
